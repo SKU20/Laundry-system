@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="card-container">
+        <div class="card">
+            <div class="card-side card-front">
+                <h1 id="welcome-message">Welcome</h1>
+                <form action="/send-verification-code" method="POST">
+                    <label for="email">University Email:</label>
+                    <input type="email" id="email" name="email" required pattern="^[a-zA-Z0-9._%+-]+@kiu\.edu\.ge$" title="Please enter a valid university email ending with kiu.edu.ge">
+                    <button type="submit">Login</button>
+                    <div id="error-message-back" class="error-message">
+                        <% if (error) { %>
+                            <%= error %>
+                        <% } %>
+                    </div>
+                </form>
+                <a href="#" id="toggle-link">Not first time?</a>
+            </div>
+            <div class="card-side card-back">
+                <h1 id="welcome-message-back">Welcome Back</h1>
+                <form id="loginFormBack" method="POST" action="/login">
+                    <label for="emailBack">University Email:</label>
+                    <input type="email" id="emailBack" name="emailBack" required pattern="^[a-zA-Z0-9._%+-]+@kiu\.edu\.ge$" title="Please enter a valid university email ending with kiu.edu.ge">
+                    <button type="submit">Login</button>
+                </form>
+                <a href="#" id="toggle-link-back">First time?</a>
+            </div>
+        </div>
+    </div>
+    <script src="/js/scripts.js"></script>
+</body>
+</html>

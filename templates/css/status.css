@@ -1,0 +1,97 @@
+/* status.css */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.machines {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.machine-card {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    width: 200px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.machine-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.machine-card img {
+    width: 100px;
+    height: auto;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease;
+}
+
+.machine-card:hover img {
+    transform: scale(1.1);
+}
+
+.status-button {
+    background: linear-gradient(135deg, #4CAF50, #66bb6a); /* Gradient Green */
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.status-button:hover {
+    background: linear-gradient(135deg, #388e3c, #4caf50);
+    transform: scale(1.05);
+}
+
+.status-button[data-status="busy"] {
+    background: linear-gradient(135deg, #f44336, #e57373); /* Gradient Red */
+}
+
+.status-button[data-status="busy"]:hover {
+    background: linear-gradient(135deg, #d32f2f, #f44336);
+}
+
+.status {
+    display: block;
+    margin: 10px 0;
+    font-weight: 500;
+    color: #333;
+}
+
+.go-back-button {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 25px;
+    font-size: 16px;
+    background: linear-gradient(135deg, #007bff, #66a1ff);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.3s ease;
+}
+
+.go-back-button:hover {
+    background: linear-gradient(135deg, #0056b3, #3380ff);
+}
+
+@media (max-width: 768px) {
+    .machine-card {
+        width: 100%;
+    }
+}
