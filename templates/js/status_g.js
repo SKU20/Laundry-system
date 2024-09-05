@@ -13,14 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.dataset.status = newStatus;
                 button.textContent = 'Release';
                 document.getElementById(`status-${id}`).textContent = newStatus;
-                await fetch('/update-machine-status', {
+                await fetch('/update-machine-status-g', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id, status: newStatus, email })
                 });
             } else {
                 // Directly update the machine status without email verification
-                const response = await fetch('/update-machine-status', {
+                const response = await fetch('/update-machine-status-g', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id, status: newStatus, email })

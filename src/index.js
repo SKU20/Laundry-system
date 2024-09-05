@@ -3,6 +3,7 @@ const path = require('path');
 const nodemailer = require('nodemailer');
 const User = require('../models/user');
 const Machine = require('../models/machines'); 
+const Machine_g = require('../models/machines_g'); 
 const app = express();
 const port = 3000;
 const bodyParser = require('body-parser');
@@ -27,25 +28,53 @@ app.get('/', (req, res) => {
     res.render('login', {error:null});  
 });
 
-
-app.get('/dashboard', (req, res) => {
-    res.render('dashboard');  
+app.get('/block', (req, res) => {
+  res.render('block');  
 });
 
-app.get('/dryer-status', async (req, res) => {
+app.get('/dashboard-F', (req, res) => {
+    res.render('dashboard-F');  
+});
+
+app.get('/dashboard-G', (req, res) => {
+  res.render('dashboard-G');  
+});
+
+
+app.get('/dryer-status-F', async (req, res) => {
   try {
     const dryers = await Machine.findAll({ where: { type: 'dryer' } });
-    res.render('dryer-status', { dryers });
+    res.render('dryer-status-F', { dryers });
   } catch (error) {
     console.error('Error fetching dryer status:', error);
     res.status(500).send('Error fetching dryer status');
   }
 });
 
-app.get('/laundry-status', async (req, res) => {
+app.get('/dryer-status-G', async (req, res) => {
+  try {
+    const dryers = await Machine_g.findAll({ where: { type: 'dryer' } });
+    res.render('dryer-status-G', { dryers });
+  } catch (error) {
+    console.error('Error fetching dryer status:', error);
+    res.status(500).send('Error fetching dryer status');
+  }
+});
+
+app.get('/laundry-status-F', async (req, res) => {
   try {
     const laundries = await Machine.findAll({ where: { type: 'laundry' } });
-    res.render('laundry-status', { laundries });
+    res.render('laundry-status-F', { laundries });
+  } catch (error) {
+    console.error('Error fetching laundry status:', error);
+    res.status(500).send('Error fetching laundry status');
+  }
+});
+
+app.get('/laundry-status-G', async (req, res) => {
+  try {
+    const laundries = await Machine_g.findAll({ where: { type: 'laundry' } });
+    res.render('laundry-status-G', { laundries });
   } catch (error) {
     console.error('Error fetching laundry status:', error);
     res.status(500).send('Error fetching laundry status');
@@ -166,7 +195,7 @@ app.post('/login', async (req, res) => {
       });
 
       if (user) {
-          return res.redirect(`/dashboard?email=${encodeURIComponent(emailBack)}`);
+          return res.redirect(`/block?email=${encodeURIComponent(emailBack)}`);
       } else {
           return res.render('login', { error: 'Email not found or verified. Please sign up first.' });
       }
@@ -202,12 +231,54 @@ app.post('/update-machine-status', async (req, res) => {
   }
 });
 
-app.post('/go-back', (req, res) => {
+app.post('/update-machine-status-g', async (req, res) => {
+  const { id, status, email } = req.body;
+
+  try {
+    const machine_g = await Machine_g.findByPk(id);
+    if (!machine_g) {
+      return res.status(404).send('Machine not found');
+    }
+
+    if (status === 'busy') {
+      await machine_g.update({ status, email });
+      return res.sendStatus(200);
+    } else if (status === 'available') {
+      // Update the machine status without checking the email
+      await machine_g.update({ status: 'available', email: null });
+      return res.sendStatus(200);
+    }
+  } catch (error) {
+    console.error('Error updating machine status:', error);
+    res.status(500).send('Error updating machine status');
+  }
+});
+
+
+app.post('/go-back-f', (req, res) => {
   const email = req.body.email;
   if (email) {
-      return res.redirect(`/dashboard?email=${encodeURIComponent(email)}`);
+      return res.redirect(`/dashboard-f?email=${encodeURIComponent(email)}`);
   } else {
-      return res.redirect('/dashboard');
+      return res.redirect('/dashboard-F');
+  }
+});
+
+app.post('/go-back-g', (req, res) => {
+  const email = req.body.email;
+  if (email) {
+      return res.redirect(`/dashboard-g?email=${encodeURIComponent(email)}`);
+  } else {
+      return res.redirect('/dashboard-G');
+  }
+});
+
+app.post('/go-block', (req, res) => {
+  const email = req.body.email;
+  if (email) {
+      return res.redirect(`/block?email=${encodeURIComponent(email)}`);
+  } else {
+      return res.redirect('/block');
   }
 });
 

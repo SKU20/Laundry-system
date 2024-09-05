@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+    <div class="container">
+        <h1>The Laundry System(F)</h1>
+        <form action="/go-block" method="post">
+            <button type="submit" class="go-back-button">Go Back</button>
+        </form>
+        
+        <div class="options">
+            <div class="option">
+                <a id="dryerLink" href="/dryer-status-F">
+                    <img src="/images/dryer.png" alt="Dryer">
+                    <button>Check Dryer</button>
+                </a>
+            </div>
+            <div class="option">
+                <a id="laundryLink" href="/laundry-status-F">
+                    <img src="/images/laundry.png" alt="Laundry Machine">
+                    <button>Check Laundry Machine</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>
+

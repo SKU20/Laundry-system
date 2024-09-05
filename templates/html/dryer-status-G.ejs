@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dryer Status(G)</title>
+    <link rel="stylesheet" href="/css/status.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Dryer Status(G)</h1>
+    <form action="/go-back-g" method="post">
+        <input type="hidden" name="email" id="hidden-email">
+        <button class="go-back-button">Go Back</button>
+    </form>
+        <div class="machines">
+            <% dryers.forEach(machine_g => { %>
+                <div class="machine-card">
+                    <img src="/images/dryer.png" alt="Dryer">
+                    <p>Machine ID: <%= machine_g.id %></p>
+                    <p>Status: <span id="status-<%= machine_g.id %>"><%= machine_g.status %></span></p>
+                    <form action="/update-machine-status-g" method="post" class="status-form">
+                        <input type="hidden" name="id" value="<%= machine_g.id %>">
+                        <input type="hidden" name="status" value="<%= machine_g.status %>">
+                        <button type="submit" class="status-button" data-id="<%= machine_g.id %>" data-status="<%= machine_g.status %>">
+                            <% if (machine_g.status === 'available') { %>
+                                Take
+                            <% } else { %>
+                                Release
+                            <% } %>
+                        </button>
+                    </form>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+    <script src="/js/status_g.js"></script>
+</body>
+</html>

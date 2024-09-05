@@ -120,6 +120,9 @@ a:hover {
 }
 
 @media (max-width: 800px) {
+    .body{
+        overflow-x: hidden;
+    }
     .card {
         max-height: none; 
     }
