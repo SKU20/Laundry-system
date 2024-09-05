@@ -1,10 +1,16 @@
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize('laundry_db', 'root', 'baza', {
-  host: '127.0.0.1',
-  dialect: 'mysql'
-});
 
+const sequelize = new Sequelize(
+  process.env.DB_DATABASE || 'laundry_db',
+  process.env.DB_USERNAME || 'root',
+  process.env.DB_PASSWORD || 'baza',
+  {
+    host: process.env.DB_HOST || '127.0.0.1', 
+    dialect: 'mysql',
+    logging: false 
+  }
+);
 
 sequelize.authenticate()
   .then(() => {
