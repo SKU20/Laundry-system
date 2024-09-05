@@ -244,7 +244,6 @@ app.post('/update-machine-status-g', async (req, res) => {
       await machine_g.update({ status, email });
       return res.sendStatus(200);
     } else if (status === 'available') {
-      // Update the machine status without checking the email
       await machine_g.update({ status: 'available', email: null });
       return res.sendStatus(200);
     }
