@@ -100,82 +100,88 @@ app.get('/verification', (req, res) => {
 
 //verifikacizacia
 app.post('/send-verification-code', async (req, res) => {
-    const { email } = req.body;
-    console.log(`Received email: ${email}`);
+  const { email } = req.body;
+  console.log(`Received email: ${email}`);
 
-    if (!email) {
-        return res.status(400).send('Email is required');
-    }
-
-    if (!email.endsWith('@kiu.edu.ge')) {
-      return res.render('login', { error: 'Invalid email domain. Please use your university email.' });
-    }
-
-    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-
-   const user = await User.upsert({
-      email,
-      verification_code: verificationCode,
-      is_verified: true,
-  });
-
-  if(user){
-    return res.render('login', { error: 'Your email is already verified.' });
+  if (!email) {
+      return res.status(400).send('Email is required');
   }
 
-    try {
-           await User.upsert({
-            email,
-            verification_code: verificationCode,
-            is_verified: false,
-        });
+  if (!email.endsWith('@kiu.edu.ge')) {
+    return res.render('login', { error: 'Invalid email domain. Please use your university email.' });
+  }
 
-        const mailOptions = {
-            from: process.env.EMAIL,
-            to: email,
-            subject: 'Your Verification Code',
-            text: `Your verification code is: ${verificationCode}`,
-        };
+  try {
+      // Check if the email already exists in the database
+      const existingUser = await User.findOne({ where: { email } });
 
+      // If email is already verified, send a message to the user
+      if (existingUser && existingUser.is_verified) {
+          return res.render('login', { error: 'Your email is already verified.' });
+      }
 
-        await transporter.sendMail(mailOptions);
-        res.redirect('/verification');
-    } catch (error) {
-        console.error('Error sending verification code:', error);
-        res.status(500).send('Error sending verification code. Please try again later.');
-    }
+      // Generate verification code
+      const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+      // If user exists but is not verified, update verification code
+      if (existingUser) {
+          existingUser.verification_code = verificationCode;
+          await existingUser.save();
+      } else {
+          // Create a new user with the verification code
+          await User.create({
+              email,
+              verification_code: verificationCode,
+              is_verified: false,
+          });
+      }
+
+      // Send verification email
+      const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: 'Your Verification Code',
+          text: `Your verification code is: ${verificationCode}`,
+      };
+
+      await transporter.sendMail(mailOptions);
+      res.redirect('/verification');
+  } catch (error) {
+      console.error('Error sending verification code:', error);
+      res.status(500).send('Error sending verification code. Please try again later.');
+  }
 });
-
-
 
 // Route to verify code
 app.post('/verify-code', async (req, res) => {
   const { email, code } = req.body;
 
   if (!email || !code) {
-    return res.status(400).send('Email and code are required');
+      return res.status(400).send('Email and code are required');
   }
 
   try {
-    const user = await User.findOne({
-      where: {
-        email,
-        verification_code: code,
-        is_verified: false,
-      },
-    });
+      const user = await User.findOne({
+          where: {
+              email,
+              verification_code: code,
+              is_verified: false,
+          },
+      });
 
-    if (!user) {
-      return res.status(400).send('Invalid or expired verification code');
-    }
-    user.is_verified = true;
-    user.verification_code = null;
-  if(user.is_verified == true){
-    await user.save();
-  }
-    res.status(200).send('Email verified successfully');
+      if (!user) {
+          return res.status(400).send('Invalid or expired verification code');
+      }
+
+      // Mark the user as verified
+      user.is_verified = true;
+      user.verification_code = null;
+      await user.save();
+
+      res.status(200).send('Email verified successfully');
   } catch (error) {
-    res.status(500).send('Error verifying code');
+      console.error('Error verifying code:', error);
+      res.status(500).send('Error verifying code');
   }
 });
 

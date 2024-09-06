@@ -153,6 +153,31 @@ h1 {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
+.sign-out-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff4b2b, #ff416c);
+    color: #ffffff;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    z-index: 2;
+}
+
+.sign-out-button:hover {
+    background: linear-gradient(135deg, #d6334c, #ff416c);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+
 @media (max-width: 1024px) {
     .container {
         padding: 30px;

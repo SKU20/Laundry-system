@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../src/database'); 
+const sequelize = require('../src/database');
 
 const User = sequelize.define('User', {
     email: {
@@ -15,14 +15,10 @@ const User = sequelize.define('User', {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
     },
-    createdAt: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-    },
-    updatedAt: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-    },
+}, {
+    tableName: 'users',
+    freezeTableName: true,
+    timestamps: false,  // Disable `createdAt` and `updatedAt`
 });
 
 module.exports = User;
