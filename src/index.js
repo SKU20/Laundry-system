@@ -112,23 +112,18 @@ app.post('/send-verification-code', async (req, res) => {
   }
 
   try {
-      // Check if the email already exists in the database
       const existingUser = await User.findOne({ where: { email } });
 
-      // If email is already verified, send a message to the user
       if (existingUser && existingUser.is_verified) {
           return res.render('login', { error: 'Your email is already verified.' });
       }
 
-      // Generate verification code
       const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
 
-      // If user exists but is not verified, update verification code
       if (existingUser) {
           existingUser.verification_code = verificationCode;
           await existingUser.save();
       } else {
-          // Create a new user with the verification code
           await User.create({
               email,
               verification_code: verificationCode,
@@ -136,7 +131,6 @@ app.post('/send-verification-code', async (req, res) => {
           });
       }
 
-      // Send verification email
       const mailOptions = {
           from: process.env.EMAIL,
           to: email,
@@ -152,7 +146,7 @@ app.post('/send-verification-code', async (req, res) => {
   }
 });
 
-// Route to verify code
+
 app.post('/verify-code', async (req, res) => {
   const { email, code } = req.body;
 
@@ -173,7 +167,6 @@ app.post('/verify-code', async (req, res) => {
           return res.status(400).send('Invalid or expired verification code');
       }
 
-      // Mark the user as verified
       user.is_verified = true;
       user.verification_code = null;
       await user.save();

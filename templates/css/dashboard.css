@@ -244,3 +244,27 @@ h1 {
         font-size: 14px;
     }
 }
+/* Sign-out button responsive styles */
+
+@media (max-width: 1024px) {
+    .sign-out-button {
+        padding: 8px 20px;
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sign-out-button {
+        padding: 7px 18px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sign-out-button {
+        padding: 6px 15px;
+        font-size: 11px;
+    }
+}
+
